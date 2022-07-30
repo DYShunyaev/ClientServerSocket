@@ -49,7 +49,6 @@ public class Parser {
             Element valueLine = values.get(index + i);
             for (Element td : valueLine.select("td")) {
                 RESULT.append(td.text()).append('\t');
-//                System.out.print(td.text() + "    ");
             }
             RESULT.append("\n");
             System.out.println();
@@ -69,7 +68,6 @@ public class Parser {
             for (Element name : names) {
                 String dateString = name.select("th[id=dt]").text();
                 String date = getDateFromString(dateString);
-//                System.out.println(date + "                Явления            Темпер.    Давл.  Влажность  Ветер");
                 RESULT.append("\n").append(date).append("               Явления            Темпер.    Давл.  Влажность  Ветер\n");
                 int iterationCount = printPartValues(values, index);
                 index = index + iterationCount;

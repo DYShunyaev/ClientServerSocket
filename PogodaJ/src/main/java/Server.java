@@ -25,7 +25,13 @@ public class Server {
                  ) {
                      String request = reader.readLine();
                      System.out.println("Request: " + request);
-                     String response = Parser.weatherForecast();
+                     String response;
+                     if (Objects.equals(request, "Погода")) {
+                         response = Parser.weatherForecast();
+
+                     } else {
+                         response = "Запрос не обработан";
+                     }
                      System.out.println("Response: " + response);
                      writer.write(Objects.requireNonNull(response));
                      writer.newLine();
