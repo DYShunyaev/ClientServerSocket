@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Server {
     public static void main(String[] args) {
         Parser parser = new Parser();
+        News news = new News();
 
         try (ServerSocket server = new ServerSocket(8000))
          {
@@ -29,6 +30,8 @@ public class Server {
                      if (Objects.equals(request, "Погода")) {
                          response = Parser.weatherForecast();
 
+                     } else if (Objects.equals(request, "Новости")) {
+                         response = News.getNews();
                      } else {
                          response = "Запрос не обработан";
                      }
