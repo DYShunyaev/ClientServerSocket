@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
+    public static final StringBuilder RESULT = new StringBuilder();
 
     private static Document getPage() throws IOException {
         String url = "https://www.pogoda.spb.ru/";
@@ -44,17 +45,19 @@ public class Parser {
                 iterationCount = 0;
             }
         }
-            for (int i = 0; i < iterationCount; i++) {
-                Element valueLine = values.get(index + i);
-                for (Element td : valueLine.select("td")) {
-                    System.out.print(td.text() + "    ");
-                }
-                System.out.println();
+        for (int i = 0; i < iterationCount; i++) {
+            Element valueLine = values.get(index + i);
+            for (Element td : valueLine.select("td")) {
+                RESULT.append(td.text()).append('\t');
+//                System.out.print(td.text() + "    ");
             }
+            RESULT.append("\n");
+            System.out.println();
+        }
         return iterationCount;
     }
 
-    public static String weatherForecast()   {
+    public static String weatherForecast() {
         Document page = null;
         try {
             page = getPage();
@@ -63,17 +66,18 @@ public class Parser {
             Elements values = tableWth.select("tr[valign=top]");
             int index = 0;
 
-            for (Element name : names){
+            for (Element name : names) {
                 String dateString = name.select("th[id=dt]").text();
                 String date = getDateFromString(dateString);
-                System.out.println(date + "                Явления            Темпер.    Давл.  Влажность  Ветер");
+//                System.out.println(date + "                Явления            Темпер.    Давл.  Влажность  Ветер");
+                RESULT.append("\n").append(date).append("               Явления            Темпер.    Давл.  Влажность  Ветер\n");
                 int iterationCount = printPartValues(values, index);
                 index = index + iterationCount;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        String strings = weatherForecast();
-        return strings;
+
+        return RESULT.toString();
     }
 }

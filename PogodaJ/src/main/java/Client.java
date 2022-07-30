@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Client {
     public static void main(String[] args) {
@@ -23,8 +25,9 @@ public class Client {
             writer.newLine();
             writer.flush();
 
-            String response = reader.readLine();
-            System.out.println("Response: " + response);
+            List<String> response = reader.lines().collect(Collectors.toList());
+            System.out.println("Response: ");
+            response.forEach(System.out::println);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
