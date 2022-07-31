@@ -1,3 +1,5 @@
+package parsers;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,26 +10,23 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Parser {
-    public static final StringBuilder RESULT = new StringBuilder();
+public class WeatherParser extends AbstractParser {
+    private final Pattern PATTERN = Pattern.compile("\\d{2}\\.\\d{2}");
+    private final String HEADER = "\tЯвления\tТемпер.\tДавл.\tВлажность\tВетер\n";
 
-    private static Document getPage() throws IOException {
-        String url = "https://www.pogoda.spb.ru/";
-        Document page = Jsoup.parse(new URL(url), 3000);
-        return page;
+    public WeatherParser(String url) {
+        super(url);
     }
 
-    private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
-
-    private static String getDateFromString(String stringDate) throws Exception {
-        Matcher matcher = pattern.matcher(stringDate);
+    private String getDateFromString(String stringDate) throws Exception {
+        Matcher matcher = PATTERN.matcher(stringDate);
         if (matcher.find()) {
             return matcher.group();
         }
         throw new Exception("Can't extract date from string!");
     }
 
-    private static int printPartValues(Elements values, int index) {
+    private int printPartValues(Elements values, int index) {
         int iterationCount = 4;
         if (index == 0) {
             Element valueLn = values.get(3);
@@ -48,18 +47,19 @@ public class Parser {
         for (int i = 0; i < iterationCount; i++) {
             Element valueLine = values.get(index + i);
             for (Element td : valueLine.select("td")) {
-                RESULT.append(td.text()).append('\t');
+                result.append(td.text()).append('\t');
             }
-            RESULT.append("\n");
+            result.append("\n");
             System.out.println();
         }
         return iterationCount;
     }
 
-    public static String weatherForecast() {
-        Document page = null;
+    @Override
+    public String getData() {
+        Document page;
         try {
-            page = getPage();
+            page = getPage(url);
             Element tableWth = page.select("table[class=wt]").first();
             Elements names = tableWth.select("tr[class=wth]");
             Elements values = tableWth.select("tr[valign=top]");
@@ -68,14 +68,13 @@ public class Parser {
             for (Element name : names) {
                 String dateString = name.select("th[id=dt]").text();
                 String date = getDateFromString(dateString);
-                RESULT.append("\n").append(date).append("               Явления            Темпер.    Давл.  Влажность  Ветер\n");
+                result.append("\n").append(date).append(HEADER);
                 int iterationCount = printPartValues(values, index);
                 index = index + iterationCount;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
-
-        return RESULT.toString();
+        return result.toString();
     }
 }
