@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PogodaJ/Client/Client.iml" filepath="$PROJECT_DIR$/PogodaJ/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ClientServerSocket.iml" filepath="$PROJECT_DIR$/ClientServerSocket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Pogoda.iml" filepath="$PROJECT_DIR$/Pogoda.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PogodaJ.iml" filepath="$PROJECT_DIR$/PogodaJ.iml" />
+    </modules>
+  </component>
+</project>
